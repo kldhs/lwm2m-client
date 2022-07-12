@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <artifactId>lwm2m-client</artifactId>
+
+    <groupId>com.adups</groupId>
+    <modelVersion>4.0.0</modelVersion>
+    <modules>
+        <module>iot-lwm2m-client</module>
+    </modules>
+
+    <packaging>pom</packaging>
+    <properties>
+        <alibaba-fastjson-version>1.2.33</alibaba-fastjson-version>
+        <cloud-api-version>1.0-SNAPSHOT</cloud-api-version>
+        <cloud-common-version>1.0-SNAPSHOT</cloud-common-version>
+        <jdk-version>1.8</jdk-version>
+        <joda-time-version>2.9.9</joda-time-version>
+        <jwt-client-version>1.0-SNAPSHOT</jwt-client-version>
+        <maven-compiler-version>3.2</maven-compiler-version>
+        <zaxxer-HikariCP-version>2.6.0</zaxxer-HikariCP-version>
+
+
+    </properties>
+    <version>1.0-SNAPSHOT</version>
+
+    <build>
+        <defaultGoal>compile</defaultGoal>
+        <directory>${basedir}/target</directory>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>${jdk-version}</source>
+                        <target>${jdk-version}</target>
+                    </configuration>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <version>${maven-compiler-version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>

@@ -1,0 +1,29 @@
+# 开发环境/测试环境
+
+logging:
+  path: ~/log/
+  level:
+    com.abupdate.iot.lwm2mClient: debug
+
+
+##lwm2m client配置
+lwm2m:
+  config:
+    op: rg
+    count: 1
+    midBegin: 202007_test_07
+    loopCount: 1
+    networkType: Wifi
+    productId: 1600392888
+    platform: MTK6517
+    deviceType: 2B-CU-AFTERSALES
+    oem: 111
+    models: 1111
+    sdkversion: 1.0
+    appversion: 1.0
+    version: 1.0
+    productSecret: a6d293a9364d4703a6b4e34774feb448
+    registerUrl: http://127.0.0.1/registllerll
+    isRegister: false
+    host: 127.0.0.1
+    downLoadUrl: coap://127.0.0.1/rd/downloads/1024/1024/a.txt
