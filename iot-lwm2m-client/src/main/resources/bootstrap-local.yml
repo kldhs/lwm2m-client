@@ -1,7 +1,7 @@
 # 开发环境/测试环境
 
 logging:
-  path: ~/log/
+  path: log/
   level:
     com.abupdate.iot.lwm2mClient: debug
 

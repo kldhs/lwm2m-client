@@ -51,8 +51,9 @@ public class ServerLwm2m extends BaseInstanceEnabler {
 
     @Override
     public ReadResponse read(ServerIdentity identity, int resourceid) {
-        if (!identity.isSystem())
+        if (!identity.isSystem()) {
             LOG.debug("Read on Server resource /{}/{}/{}", getModel().id, getId(), resourceid);
+        }
         LOG.debug("Read on Server resource /{}/{}/{}", getModel().id, getId(), resourceid);
         switch (resourceid) {
             case 0: // short server ID
@@ -62,13 +63,15 @@ public class ServerLwm2m extends BaseInstanceEnabler {
                 return ReadResponse.success(resourceid, lifetime);
 
             case 2: // default min period
-                if (null == defaultMinPeriod)
+                if (null == defaultMinPeriod) {
                     return ReadResponse.notFound();
+                }
                 return ReadResponse.success(resourceid, defaultMinPeriod);
 
             case 3: // default max period
-                if (null == defaultMaxPeriod)
+                if (null == defaultMaxPeriod) {
                     return ReadResponse.notFound();
+                }
                 return ReadResponse.success(resourceid, defaultMaxPeriod);
 
             case 6: // notification storing when disable or offline
@@ -86,8 +89,9 @@ public class ServerLwm2m extends BaseInstanceEnabler {
 
     @Override
     public WriteResponse write(ServerIdentity identity, int resourceid, LwM2mResource value) {
-        if (!identity.isSystem())
+        if (!identity.isSystem()) {
             LOG.debug("Write on Server resource /{}/{}/{}", getModel().id, getId(), resourceid);
+        }
         LOG.debug("Write on Server resource /{}/{}/{}", getModel().id, getId(), resourceid);
         switch (resourceid) {
             case 0:
@@ -96,8 +100,9 @@ public class ServerLwm2m extends BaseInstanceEnabler {
                 }
                 int previousShortServerId = shortServerId;
                 shortServerId = ((Long) value.getValue()).intValue();
-                if (previousShortServerId != shortServerId)
+                if (previousShortServerId != shortServerId) {
                     fireResourcesChange(resourceid);
+                }
                 return WriteResponse.success();
 
             case 1:
@@ -106,8 +111,9 @@ public class ServerLwm2m extends BaseInstanceEnabler {
                 }
                 long previousLifetime = lifetime;
                 lifetime = (Long) value.getValue();
-                if (previousLifetime != lifetime)
+                if (previousLifetime != lifetime) {
                     fireResourcesChange(resourceid);
+                }
                 return WriteResponse.success();
 
             case 2:
@@ -116,8 +122,9 @@ public class ServerLwm2m extends BaseInstanceEnabler {
                 }
                 Long previousDefaultMinPeriod = defaultMinPeriod;
                 defaultMinPeriod = (Long) value.getValue();
-                if (!Objects.equals(previousDefaultMinPeriod, defaultMinPeriod))
+                if (!Objects.equals(previousDefaultMinPeriod, defaultMinPeriod)) {
                     fireResourcesChange(resourceid);
+                }
                 return WriteResponse.success();
 
             case 3:
@@ -126,8 +133,9 @@ public class ServerLwm2m extends BaseInstanceEnabler {
                 }
                 Long previousDefaultMaxPeriod = defaultMaxPeriod;
                 defaultMaxPeriod = (Long) value.getValue();
-                if (!Objects.equals(previousDefaultMaxPeriod, defaultMaxPeriod))
+                if (!Objects.equals(previousDefaultMaxPeriod, defaultMaxPeriod)) {
                     fireResourcesChange(resourceid);
+                }
                 return WriteResponse.success();
 
             case 6: // notification storing when disable or offline
@@ -136,8 +144,9 @@ public class ServerLwm2m extends BaseInstanceEnabler {
                 }
                 boolean previousNotifyWhenDisable = notifyWhenDisable;
                 notifyWhenDisable = (boolean) value.getValue();
-                if (previousNotifyWhenDisable != notifyWhenDisable)
+                if (previousNotifyWhenDisable != notifyWhenDisable) {
                     fireResourcesChange(resourceid);
+                }
                 return WriteResponse.success();
 
             case 7: // binding
@@ -147,8 +156,9 @@ public class ServerLwm2m extends BaseInstanceEnabler {
                 try {
                     BindingMode previousBinding = binding;
                     binding = BindingMode.valueOf((String) value.getValue());
-                    if (!Objects.equals(previousBinding, binding))
+                    if (!Objects.equals(previousBinding, binding)) {
                         fireResourcesChange(resourceid);
+                    }
                     return WriteResponse.success();
                 } catch (IllegalArgumentException e) {
                     return WriteResponse.badRequest("invalid value");
