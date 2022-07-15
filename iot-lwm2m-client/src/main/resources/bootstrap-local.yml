@@ -1,9 +1,11 @@
 # 开发环境/测试环境
 
+#logging:
+#  path: log/
+#  level:
+#    com.abupdate.iot.lwm2mClient: debug
 logging:
-  path: log/
-  level:
-    com.abupdate.iot.lwm2mClient: debug
+  config: classpath:logback-local.xml
 
 
 ##lwm2m client配置
@@ -26,4 +28,10 @@ lwm2m:
     registerUrl: http://127.0.0.1/registllerll
     isRegister: false
     host: 127.0.0.1
+#    host: 103.40.232.190
+#    host: 103.40.232.176
+#    host: 103.40.232.175
+#    host: 221.228.214.70
+#    host: 103.40.232.162
+#    host: 58.215.186.84
     downLoadUrl: coap://127.0.0.1/rd/downloads/1024/1024/a.txt
