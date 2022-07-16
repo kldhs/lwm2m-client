@@ -4,7 +4,6 @@ import com.abupdate.iot.lwm2mClient.properties.Lwm2mConfigProperties;
 import com.abupdate.iot.lwm2mClient.util.Codec2;
 import org.eclipse.californium.core.CoapClient;
 import org.eclipse.californium.core.CoapResponse;
-import org.eclipse.californium.elements.exception.ConnectorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +43,7 @@ public class CoapDownloader {
                 String responseText = coapResponse.getResponseText();
                 logger.info("responseText :{}",responseText);
             }
-        } catch (URISyntaxException | ConnectorException | IOException e) {
+        } catch (Exception e) {
             logger.error("error:",e);
         }
     }

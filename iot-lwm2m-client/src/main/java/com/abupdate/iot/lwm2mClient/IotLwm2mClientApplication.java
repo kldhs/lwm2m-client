@@ -1,6 +1,5 @@
 package com.abupdate.iot.lwm2mClient;
 
-import com.abupdate.iot.lwm2mClient.client.CoapDownloader;
 import com.abupdate.iot.lwm2mClient.client.Lwm2mClient;
 import com.abupdate.iot.lwm2mClient.properties.Lwm2mConfigProperties;
 import org.springframework.boot.SpringApplication;
@@ -22,7 +21,7 @@ public class IotLwm2mClientApplication {
         /**
          * 测试下载功能
          */
-        CoapDownloader.downLoad();
+        //CoapDownloader.downLoad();
     }
 
 }

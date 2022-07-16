@@ -60,17 +60,16 @@ public class Lwm2mClient {
             "LWM2M_LOCKWIPE-v1_0_1.xml", "LWM2M_Portfolio-v1_0.xml",
             "LWM2M_Software_Component-v1_0.xml", "LWM2M_Software_Management-v1_0.xml",
             "LWM2M_WLAN_connectivity4-v1_0.xml", "LwM2M_BinaryAppDataContainer-v1_0_1.xml",
-            "LwM2M_EventLog-V1_0.xml","LWM2M_Firmware_Update-v1_0_3.xml","3308.xml"};
+            "LwM2M_EventLog-V1_0.xml", "LWM2M_Firmware_Update-v1_0_3.xml", "3308.xml"};
 
     /**
-     *@Description: 多线程创建lwm2m2客户端
-     *@Param:
-     *@return:
-     *@Author: miaomingwei
-     *@date: 2020/8/31 16:36
+     * @Description: 多线程创建lwm2m2客户端
+     * @Param:
+     * @return:
+     * @Author: miaomingwei
+     * @date: 2020/8/31 16:36
      */
-    public  static   void  start()
-    {
+    public static void start() {
         try {
             initLwm2mClient(Lwm2mConfigProperties.getMidBegin());
         } catch (InvalidModelException e) {
@@ -80,38 +79,16 @@ public class Lwm2mClient {
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        copyOnWriteArrayList.forEach(t -> {
-//            executorService.submit(new Runnable() {
-//                @Override
-//                public void run() {
-//                    try {
-//                        try {
-//                            Thread.sleep(1000);
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
-//                        initLwm2mClient(t);
-//                    } catch (InvalidModelException e) {
-//                        e.printStackTrace();
-//                    } catch (InvalidDDFFileException e) {
-//                        e.printStackTrace();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            });
-//        });
-//        executorService.shutdown();
     }
 
     /**
-     *@Description: 初始化lwm2m对象的属性
-     *@Param:
-     *@return:
-     *@Author: miaomingwei
-     *@date: 2020/8/31 16:51
+     * @Description: 初始化lwm2m对象的属性
+     * @Param:
+     * @return:
+     * @Author: miaomingwei
+     * @date: 2020/8/31 16:51
      */
-    public  static void initLwm2mClient(String sn) throws InvalidModelException, InvalidDDFFileException, IOException {
+    public static void initLwm2mClient(String sn) throws InvalidModelException, InvalidDDFFileException, IOException {
         // Initialize model
         List<ObjectModel> models = ObjectLoader.loadDefault();
         models.addAll(ObjectLoader.loadDdfResources("/models/", modelPaths));
@@ -131,22 +108,20 @@ public class Lwm2mClient {
         }
         Map<String, String> additionalAttributes = new HashMap<String, String>();
         Long timeStamp = System.currentTimeMillis();
-        additionalAttributes.put("productId",Lwm2mConfigProperties.getProductId());
+        additionalAttributes.put("productId", Lwm2mConfigProperties.getProductId());
         additionalAttributes.put("platform", Lwm2mConfigProperties.getPlatform());
         additionalAttributes.put("deviceType", Lwm2mConfigProperties.getDeviceType());
-
         // mid
-        additionalAttributes.put("ep",sn);
-
+        additionalAttributes.put("ep", sn);
         //additionalAttributes.put("ep", "GUSQVI9VXUXLP0GMR45SHQ00");
         //additionalAttributes.put("op", Lwm2mConfigProperties.getOp());
-        additionalAttributes.put("sms",Lwm2mConfigProperties.getProductId());
+        additionalAttributes.put("sms", Lwm2mConfigProperties.getProductId());
         additionalAttributes.put("b", "U");
         additionalAttributes.put("oem", Lwm2mConfigProperties.getOem());
         additionalAttributes.put("models", Lwm2mConfigProperties.getModels());
         additionalAttributes.put("sdkversion", Lwm2mConfigProperties.getSdkversion());
         additionalAttributes.put("appversion", Lwm2mConfigProperties.getAppversion());
-        additionalAttributes.put("version",Lwm2mConfigProperties.getVersion());
+        additionalAttributes.put("version", Lwm2mConfigProperties.getVersion());
         additionalAttributes.put("networkType", Lwm2mConfigProperties.getNetworkType());
         additionalAttributes.put("timestamp", Long.toString(timeStamp));
         additionalAttributes.put("sign", buildSign(sn, Lwm2mConfigProperties.getProductId(), Lwm2mConfigProperties.getProductSecret(), timeStamp.toString()));
@@ -157,17 +132,16 @@ public class Lwm2mClient {
 
         // Get additional attributes for bootstrap
         Map<String, String> bsAdditionalAttributes = null;
-
-        MySimpleInstanceEnabler mySimpleInstanceEnabler=new MySimpleInstanceEnabler(0);
+        MySimpleInstanceEnabler mySimpleInstanceEnabler = new MySimpleInstanceEnabler(0);
         mySimpleInstanceEnabler.setModel(models.get(21));
         MyDevice myDevice = new MyDevice();
         MyObject myObject = new MyObject();
-        initializer.setInstancesForObject(LwM2mId.SECURITY, Security.noSec("coap://"+Lwm2mConfigProperties.getHost()+":5683", 12345));
+        initializer.setInstancesForObject(LwM2mId.SECURITY, Security.noSec("coap://" + Lwm2mConfigProperties.getHost() + ":5683", 12345));
         ServerLwm2m cv = new ServerLwm2m(12345, 5 * 60, BindingMode.U, false, "cv");
         initializer.setInstancesForObject(LwM2mId.SERVER, cv);
         initializer.setInstancesForObject(LwM2mId.DEVICE, myDevice);
-        initializer.setInstancesForObject(3308,myObject);
-        initializer.setInstancesForObject(LwM2mId.FIRMWARE,mySimpleInstanceEnabler);
+        initializer.setInstancesForObject(3308, myObject);
+        initializer.setInstancesForObject(LwM2mId.FIRMWARE, mySimpleInstanceEnabler);
         List<LwM2mObjectEnabler> enablers = initializer.createAll();
         //String endpoint = "867726035711307" ; // 选择一个端点名称
         String endpoint = sn;
@@ -180,7 +154,6 @@ public class Lwm2mClient {
         builder.setRegistrationEngineFactory(engineFactory);
         builder.setEndpointFactory(endpointFactory);
         builder.setBootstrapAdditionalAttributes(bsAdditionalAttributes);
-
         // add it to the client  添加到客户端
         LeshanClient client = builder.build();
         client.getObjectTree().addListener(new ObjectsListenerAdapter() {
@@ -197,10 +170,10 @@ public class Lwm2mClient {
             }
         });
         client.start();
-        toDoCheck(client,additionalAttributes,myDevice,mySimpleInstanceEnabler);
+        //toDoCheck(client,additionalAttributes,myDevice,mySimpleInstanceEnabler);
     }
 
-    static DefaultEndpointFactory getEndpointFactory(){
+    static DefaultEndpointFactory getEndpointFactory() {
         return new DefaultEndpointFactory("LWM2M CLIENT") {
             @Override
             protected Connector createSecuredConnector(DtlsConnectorConfig dtlsConfig) {
@@ -268,8 +241,8 @@ public class Lwm2mClient {
     }
 
 
-    private static void toDoCheck(LeshanClient client,Map<String, String> additionalAttributes,MyDevice myDevice,
-                                  MySimpleInstanceEnabler mySimpleInstanceEnabler ){
+    private static void toDoCheck(LeshanClient client, Map<String, String> additionalAttributes, MyDevice myDevice,
+                                  MySimpleInstanceEnabler mySimpleInstanceEnabler) {
 
         logger.info("toDoCheck 1/2");
 
@@ -278,11 +251,11 @@ public class Lwm2mClient {
         } catch (InterruptedException e) {
         }
 
-        additionalAttributes.put("op","ua");
-        additionalAttributes.put("v","1");
-        additionalAttributes.put("version","1");
-        additionalAttributes.put("mid","ted_test_20210507_01");
-        additionalAttributes.put("productId","1600392888");
+        additionalAttributes.put("op", "ua");
+        additionalAttributes.put("v", "1");
+        additionalAttributes.put("version", "1");
+        additionalAttributes.put("mid", "ted_test_20210507_01");
+        additionalAttributes.put("productId", "1600392888");
         logger.info("set op = ua");
 //
 //        for (String key : additionalAttributes.keySet()) {
@@ -293,7 +266,7 @@ public class Lwm2mClient {
 //            }
 //        }
         client.triggerRegistrationUpdate();
-        myDevice.fireResourcesChange(0,200,180, 8);
+        myDevice.fireResourcesChange(0, 200, 180, 8);
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
@@ -301,17 +274,17 @@ public class Lwm2mClient {
         }
 
         client.triggerRegistrationUpdate();
-        mySimpleInstanceEnabler.fireResourcesChange(0,1,100,101,102);
+        mySimpleInstanceEnabler.fireResourcesChange(0, 1, 100, 101, 102);
 
         logger.info("toDoCheck 2/2");
     }
 
     /**
-     *@Description: 获取激活码
-     *@Param:
-     *@return:
-     *@Author: miaomingwei
-     *@date: 2020/9/8 11:26
+     * @Description: 获取激活码
+     * @Param:
+     * @return:
+     * @Author: miaomingwei
+     * @date: 2020/9/8 11:26
      */
     private static void getActiveCode(Map<String, String> additionalAttributes, MyDevice myDevice, LeshanClient client) {
 
@@ -330,11 +303,11 @@ public class Lwm2mClient {
     }
 
     /**
-     *@Description: 校验版本方法
-     *@Param:
-     *@return:
-     *@Author: miaomingwei
-     *@date: 2020/9/8 11:26
+     * @Description: 校验版本方法
+     * @Param:
+     * @return:
+     * @Author: miaomingwei
+     * @date: 2020/9/8 11:26
      */
     private static void checkVersion(Map<String, String> additionalAttributes, MyDevice myDevice, LeshanClient client) {
 
@@ -354,13 +327,13 @@ public class Lwm2mClient {
 
 
     /**
-     *@Description: 创建Sign
-     *@Param:
-     *@return: 返回Sign
-     *@Author: miaomingwei
-     *@date: 2020/8/31 16:36
+     * @Description: 创建Sign
+     * @Param:
+     * @return: 返回Sign
+     * @Author: miaomingwei
+     * @date: 2020/8/31 16:36
      */
-    public  static String buildSign(String mid, String productId, String productSecret, String timeStamp) {
+    public static String buildSign(String mid, String productId, String productSecret, String timeStamp) {
         //Integer calc = CRCUtils.calc((mid + productId + productSecret + timeStamp).getBytes());
         //return  calc.toString();
         //uriQuery.getEp() + uriQuery.getProductId() + uriQuery.getTimestamp(), product.getProductSecret()

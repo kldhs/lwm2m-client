@@ -89,35 +89,33 @@
         <dependency>
             <groupId>org.eclipse.leshan</groupId>
             <artifactId>leshan-client-cf</artifactId>
-            <scope>system</scope>
-            <version>2.0.0-SNAPSHOT</version>
-            <systemPath>${project.basedir}/lib/leshan-client-cf-2.0.0-SNAPSHOT.jar</systemPath>
+<!--            <scope>system</scope>-->
+            <version>2.0.0-M2</version>
+<!--            <systemPath>${project.basedir}/lib/leshan-client-cf-2.0.0-SNAPSHOT.jar</systemPath>-->
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.leshan</groupId>
             <artifactId>leshan-client-core</artifactId>
-            <scope>system</scope>
-            <version>2.0.0-SNAPSHOT</version>
-            <systemPath>${project.basedir}/lib/leshan-client-core-2.0.0-SNAPSHOT.jar</systemPath>
+<!--            <scope>system</scope>-->
+            <version>2.0.0-M2</version>
+<!--            <systemPath>${project.basedir}/lib/leshan-client-core-2.0.0-SNAPSHOT.jar</systemPath>-->
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.leshan</groupId>
             <artifactId>leshan-core-cf</artifactId>
-            <scope>system</scope>
-            <version>2.0.0-SNAPSHOT</version>
-            <systemPath>${project.basedir}/lib/leshan-core-cf-2.0.0-SNAPSHOT.jar</systemPath>
-
-
+<!--            <scope>system</scope>-->
+            <version>2.0.0-M2</version>
+<!--            <systemPath>${project.basedir}/lib/leshan-core-cf-2.0.0-SNAPSHOT.jar</systemPath>-->
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.leshan</groupId>
             <artifactId>leshan-core</artifactId>
-            <scope>system</scope>
-            <version>2.0.0-SNAPSHOT</version>
-            <systemPath>${project.basedir}/lib/leshan-core-2.0.0-SNAPSHOT.jar</systemPath>
+<!--            <scope>system</scope>-->
+            <version>2.0.0-M2</version>
+<!--            <systemPath>${project.basedir}/lib/leshan-core-2.0.0-SNAPSHOT.jar</systemPath>-->
         </dependency>
 
 
