@@ -169,6 +169,7 @@ public class Lwm2mClient {
                 logger.info("Object {} disabled.");
             }
         });
+        //服务注册-->1
         client.start();
         //toDoCheck(client,additionalAttributes,myDevice,mySimpleInstanceEnabler);
     }

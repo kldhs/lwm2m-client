@@ -179,6 +179,7 @@ public class DefaultRegistrationEngine implements RegistrationEngine {
 
     @Override
     public void start() {
+        //服务注册-->3
         stop(false); // Stop without de-register
         synchronized (this) {
             started = true;
@@ -549,6 +550,9 @@ public class DefaultRegistrationEngine implements RegistrationEngine {
         return;
     }
 
+    /**
+     * 注册
+     */
     private class RegistrationTask implements Runnable {
         private final ServerIdentity server;
 

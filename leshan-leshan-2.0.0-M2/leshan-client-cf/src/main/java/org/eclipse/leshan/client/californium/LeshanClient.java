@@ -221,7 +221,9 @@ public class LeshanClient implements LwM2mClient {
     public void start() {
         LOG.info("Starting Leshan client ...");
         endpointsManager.start();
+        //服务注册-->2
         engine.start();
+        //所有LwM2m对象
         objectTree.start();
 
         if (LOG.isInfoEnabled()) {
