@@ -1,15 +1,15 @@
 /*******************************************************************************
  * Copyright (c) 2015 Sierra Wireless and others.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * and Eclipse Distribution License v1.0 which accompany this distribution.
- * 
+ *
  * The Eclipse Public License is available at
  *    http://www.eclipse.org/legal/epl-v20.html
  * and the Eclipse Distribution License is available at
  *    http://www.eclipse.org/org/documents/edl-v10.html.
- * 
+ *
  * Contributors:
  *     Sierra Wireless - initial API and implementation
  *******************************************************************************/
@@ -125,23 +125,25 @@ public class DefaultRegistrationEngine implements RegistrationEngine {
     private final boolean attachedExecutor;
 
     public DefaultRegistrationEngine(String endpoint, LwM2mObjectTree objectTree, EndpointsManager endpointsManager,
-            LwM2mRequestSender requestSender, BootstrapHandler bootstrapState, LwM2mClientObserver observer,
-            Map<String, String> additionalAttributes, ScheduledExecutorService executor, long requestTimeoutInMs,
-            long deregistrationTimeoutInMs, int bootstrapSessionTimeoutInSec, int retryWaitingTimeInMs,
-            Integer communicationPeriodInMs, boolean reconnectOnUpdate, boolean resumeOnConnect) {
+                                     LwM2mRequestSender requestSender, BootstrapHandler bootstrapState, LwM2mClientObserver observer,
+                                     Map<String, String> additionalAttributes, ScheduledExecutorService executor, long requestTimeoutInMs,
+                                     long deregistrationTimeoutInMs, int bootstrapSessionTimeoutInSec, int retryWaitingTimeInMs,
+                                     Integer communicationPeriodInMs, boolean reconnectOnUpdate, boolean resumeOnConnect) {
         this(endpoint, objectTree, endpointsManager, requestSender, bootstrapState, observer, additionalAttributes,
                 null, executor, requestTimeoutInMs, deregistrationTimeoutInMs, bootstrapSessionTimeoutInSec,
                 retryWaitingTimeInMs, communicationPeriodInMs, reconnectOnUpdate, resumeOnConnect, false, null);
     }
 
-    /** @since 1.1 */
+    /**
+     * @since 1.1
+     */
     public DefaultRegistrationEngine(String endpoint, LwM2mObjectTree objectTree, EndpointsManager endpointsManager,
-            LwM2mRequestSender requestSender, BootstrapHandler bootstrapState, LwM2mClientObserver observer,
-            Map<String, String> additionalAttributes, Map<String, String> bsAdditionalAttributes,
-            ScheduledExecutorService executor, long requestTimeoutInMs, long deregistrationTimeoutInMs,
-            int bootstrapSessionTimeoutInSec, int retryWaitingTimeInMs, Integer communicationPeriodInMs,
-            boolean reconnectOnUpdate, boolean resumeOnConnect, boolean useQueueMode,
-            ContentFormat preferredContentFormat) {
+                                     LwM2mRequestSender requestSender, BootstrapHandler bootstrapState, LwM2mClientObserver observer,
+                                     Map<String, String> additionalAttributes, Map<String, String> bsAdditionalAttributes,
+                                     ScheduledExecutorService executor, long requestTimeoutInMs, long deregistrationTimeoutInMs,
+                                     int bootstrapSessionTimeoutInSec, int retryWaitingTimeInMs, Integer communicationPeriodInMs,
+                                     boolean reconnectOnUpdate, boolean resumeOnConnect, boolean useQueueMode,
+                                     ContentFormat preferredContentFormat) {
         this.endpoint = endpoint;
         this.objectEnablers = objectTree.getObjectEnablers();
         this.bootstrapHandler = bootstrapState;
@@ -179,7 +181,6 @@ public class DefaultRegistrationEngine implements RegistrationEngine {
 
     @Override
     public void start() {
-        //服务注册-->3
         stop(false); // Stop without de-register
         synchronized (this) {
             started = true;
@@ -192,7 +193,9 @@ public class DefaultRegistrationEngine implements RegistrationEngine {
                 if (!scheduleClientInitiatedBootstrap(NOW))
                     throw new IllegalStateException("Unable to start client : No valid server available!");
             } else {
+                //服务注册-->3
                 registerFuture = schedExecutor.submit(new RegistrationTask(dmServer));
+                System.out.println("!11111111111");
             }
         }
     }
@@ -297,6 +300,12 @@ public class DefaultRegistrationEngine implements RegistrationEngine {
         return registerStatus == Status.SUCCESS;
     }
 
+    /**
+     * 服务注册
+     * @param server
+     * @return
+     * @throws InterruptedException
+     */
     private Status register(ServerIdentity server) throws InterruptedException {
         DmServerInfo dmInfo = ServersInfoExtractor.getDMServerInfo(objectEnablers, server.getId());
 
@@ -334,7 +343,8 @@ public class DefaultRegistrationEngine implements RegistrationEngine {
 
                 // Update every lifetime period
                 long delay = calculateNextUpdate(server, dmInfo.lifetime);
-                scheduleUpdate(server, registrationID, new RegistrationUpdate(), delay);
+                //更新服务
+                //scheduleUpdate(server, registrationID, new RegistrationUpdate(null, null, null, null, additionalAttributes), delay);
 
                 if (observer != null) {
                     observer.onRegistrationSuccess(server, request, registrationID);
@@ -562,10 +572,14 @@ public class DefaultRegistrationEngine implements RegistrationEngine {
 
         @Override
         public void run() {
+            //服务注册-->4
             synchronized (taskLock) {
                 try {
+                    //如果注册失败
                     if (!registerWithRetry(server)) {
+                        //如果初始化引导服务失败
                         if (!scheduleClientInitiatedBootstrap(NOW)) {
+                            //定时注册服务
                             scheduleRegistrationTask(server, retryWaitingTimeInMs);
                         }
                     }
@@ -581,7 +595,7 @@ public class DefaultRegistrationEngine implements RegistrationEngine {
     }
 
     private synchronized void scheduleUpdate(ServerIdentity server, String registrationId,
-            RegistrationUpdate registrationUpdate, long timeInMs) {
+                                             RegistrationUpdate registrationUpdate, long timeInMs) {
         if (!started) {
             return;
         }
@@ -603,7 +617,7 @@ public class DefaultRegistrationEngine implements RegistrationEngine {
         private final RegistrationUpdate registrationUpdate;
 
         public UpdateRegistrationTask(ServerIdentity server, String registrationId,
-                RegistrationUpdate registrationUpdate) {
+                                      RegistrationUpdate registrationUpdate) {
             this.server = server;
             this.registrationId = registrationId;
             this.registrationUpdate = registrationUpdate;
