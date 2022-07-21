@@ -32,6 +32,8 @@ import org.eclipse.leshan.core.request.RegisterRequest;
 import org.eclipse.leshan.core.request.UpdateRequest;
 import org.eclipse.leshan.core.request.UplinkRequest;
 import org.eclipse.leshan.core.request.UplinkRequestVisitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class is able to create CoAP request from LWM2M {@link UplinkRequest}.
@@ -39,7 +41,7 @@ import org.eclipse.leshan.core.request.UplinkRequestVisitor;
  * Call <code>CoapRequestBuilder#visit(lwm2mRequest)</code>, then get the result using {@link #getRequest()}
  */
 public class CoapRequestBuilder implements UplinkRequestVisitor {
-
+    private static final Logger logger = LoggerFactory.getLogger(CoapRequestBuilder.class);
     protected Request coapRequest;
     protected final Identity server;
 
@@ -70,8 +72,9 @@ public class CoapRequestBuilder implements UplinkRequestVisitor {
         coapRequest = Request.newPost();
         buildRequestSettings();
         coapRequest.getOptions().setContentFormat(ContentFormat.LINK.getCode());
+        logger.error("注册添加OptionSet属性：\"Content-Format\":\"application/link-format\"");
         coapRequest.getOptions().addUriPath("rd");
-
+        logger.error("注册添加OptionSet属性：\"Uri-Path\":\"rd\"");
         HashMap<String, String> attributes = new HashMap<>();
         attributes.putAll(request.getAdditionalAttributes());
 
